@@ -129,11 +129,17 @@ function getRandomUserInteraction(tracks: { id: number }[]): {
 // -----------------------------------------------------------------------------
 
 function seedUsers(amount: number): void {
-  // empty the users table
-  const deleteQuery: Statement = db.query("DELETE FROM users");
-  deleteQuery.run();
+  // Drop and recreate the users table
+  db.exec(`
+    DROP TABLE IF EXISTS users;
+    CREATE TABLE "users" (
+      "id" INTEGER,
+      "username" TEXT NOT NULL UNIQUE,
+      PRIMARY KEY ("id" AUTOINCREMENT)
+    );
+  `);
 
-  // seed the users table
+  // Seed the users table
   const users: User[] = Array.from({ length: amount }, (_, i) => ({
     username: `User ${i + 1}`,
   }));
@@ -146,14 +152,24 @@ function seedUsers(amount: number): void {
 }
 
 function seedUserSessions(amount: number): void {
-  // empty the user sessions table
-  db.exec("DELETE FROM sessions");
+  // Drop and recreate the sessions table
+  db.exec(`
+    DROP TABLE IF EXISTS sessions;
+    CREATE TABLE "sessions" (
+      "id" INTEGER,
+      "user_id" INTEGER NOT NULL,
+      "active" INTEGER NOT NULL DEFAULT 1,
+      "created_at" INTEGER NOT NULL,
+      FOREIGN KEY ("user_id") REFERENCES "users" ("id"),
+      PRIMARY KEY ("id" AUTOINCREMENT)
+    );
+  `);
 
-  // get all user ids
+  // Get all user ids
   const userIdsQuery: Statement = db.prepare("SELECT id FROM users");
   const userIds: { id: number }[] = userIdsQuery.all();
 
-  // seed the user sessions table
+  // Seed the user sessions table
   const userSessions: UserSession[] = Array.from({ length: amount }, (_, i) => ({
     user_id: userIds[i % userIds.length].id,
     created_at: getTimestamp(),
@@ -172,16 +188,21 @@ function seedUserSessions(amount: number): void {
     });
   })();
 
-  console.log("User sessions seeded successfully.");
+  console.log("User sessions table seeded successfully.");
 }
 
-// seed the artists table
 function seedArtists(amount: number): void {
-  // empty the artists table
-  const deleteQuery: Statement = db.query("DELETE FROM artists");
-  deleteQuery.run();
+  // Drop and recreate the artists table
+  db.exec(`
+    DROP TABLE IF EXISTS artists;
+    CREATE TABLE "artists" (
+      "id" INTEGER,
+      "name" TEXT NOT NULL,
+      PRIMARY KEY ("id" AUTOINCREMENT)
+    );
+  `);
 
-  // seed the artists table
+  // Seed the artists table
   const artists: Artist[] = Array.from({ length: amount }, (_, i) => ({
     name: `Artist ${i + 1}`,
   }));
@@ -193,13 +214,20 @@ function seedArtists(amount: number): void {
   console.log("Artists table seeded successfully.");
 }
 
-// seed the tracks table
-function seedTracks(amount): void {
-  // empty the tracks table
-  const deleteQuery: Statement = db.query("DELETE FROM tracks");
-  deleteQuery.run();
+function seedTracks(amount: number): void {
+  // Drop and recreate the tracks table
+  db.exec(`
+    DROP TABLE IF EXISTS tracks;
+    CREATE TABLE "tracks" (
+      "id" INTEGER,
+      "title" TEXT NOT NULL,
+      "artist_id" INTEGER NOT NULL,
+      PRIMARY KEY ("id" AUTOINCREMENT),
+      FOREIGN KEY ("artist_id") REFERENCES "artists" ("id")
+    );
+  `);
 
-  // seed the tracks table
+  // Seed the tracks table
   const tracks: Track[] = Array.from({ length: amount }, (_, i) => ({
     title: `Track ${i + 1}`,
     artist_id: Math.floor(Math.random() * 20) + 1,
@@ -217,16 +245,27 @@ function seedTracks(amount): void {
   console.log("Tracks table seeded successfully.");
 }
 
-// seed the visits table
 function seedVisits(amount: number): void {
-  // Empty the visits table
-  db.exec("DELETE FROM visits");
+  // Drop and recreate the visits table
+  db.exec(`
+    DROP TABLE IF EXISTS visits;
+    CREATE TABLE "visits" (
+      "id" INTEGER,
+      "artist_id" INTEGER NOT NULL,
+      "session_id" INTEGER NOT NULL,
+      "start_time" INTEGER NOT NULL,
+      "end_time" INTEGER NOT NULL,
+      PRIMARY KEY ("id" AUTOINCREMENT),
+      FOREIGN KEY ("session_id") REFERENCES "sessions" ("id"),
+      FOREIGN KEY ("artist_id") REFERENCES "artists" ("id")
+    );
+  `);
 
-  // get all artist ids
+  // Get all artist ids
   const artistIdsQuery: Statement = db.prepare("SELECT id FROM artists");
   const artistIds: { id: number }[] = artistIdsQuery.all();
 
-  // get all sessions
+  // Get all sessions
   const sessionsQuery: Statement = db.prepare("SELECT id FROM sessions");
   const sessions: { id: number }[] = sessionsQuery.all();
 
@@ -262,25 +301,36 @@ function seedVisits(amount: number): void {
   console.log("Visits table seeded successfully.");
 }
 
-// seed user_events table
 function seedUserEvents(amount: number): void {
-  // empty the user_events table
-  const deleteQuery: Statement = db.query("DELETE FROM user_events");
-  deleteQuery.run();
+  // Drop and recreate the user_events table
+  db.exec(`
+    DROP TABLE IF EXISTS user_events;
+    CREATE TABLE "user_events" (
+      "id" INTEGER,
+      "user_id" INTEGER NOT NULL,
+      "artist_id" INTEGER NOT NULL,
+      "event_type" TEXT NOT NULL,
+      "event_target" TEXT,
+      "created_at" INTEGER NOT NULL,
+      PRIMARY KEY ("id" AUTOINCREMENT),
+      FOREIGN KEY ("user_id") REFERENCES "users" ("id"),
+      FOREIGN KEY ("artist_id") REFERENCES "artists" ("id")
+    );
+  `);
 
-  // get all user ids
+  // Get all user ids
   const userIdsQuery: Statement = db.prepare("SELECT id FROM users");
   const userIds: { id: number }[] = userIdsQuery.all();
 
-  // get all artist ids
+  // Get all artist ids
   const artistIdsQuery: Statement = db.prepare("SELECT id FROM artists");
   const artistIds: { id: number }[] = artistIdsQuery.all();
 
-  // get all tracks
+  // Get all tracks
   const tracksQuery: Statement = db.prepare("SELECT id FROM tracks");
   const tracks: { id: number }[] = tracksQuery.all();
 
-  // seed the user_events table
+  // Seed the user_events table
   const userEvents: UserEvent[] = Array.from({ length: amount }, () => {
     const randomUser = userIds[Math.floor(Math.random() * userIds.length)];
     const randomArtist =
