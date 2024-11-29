@@ -1,7 +1,7 @@
-# Huddled Take Home Task
----
+# Resources:
+https://bun.sh/
 
-### **Task 1: Debugging Artist Interaction Table**
+# **Task 1: Debugging Artist Interaction Table**
 
 ### **Description:**
 
@@ -10,7 +10,7 @@ You have been provided with a system that tracks user interactions on artist pag
 The table should show the following columns:
 
 | Artist Id | Artist Name | Total Interaction Time | Total Unique Visitors |
-| --- | --- | --- | --- |
+|-----------|-------------|-------------------------|------------------------|
 
 **Important Requirements**:
 
@@ -25,7 +25,7 @@ The table should show the following columns:
 3. **Sorting:**
     - Table should be sorted by descending total interaction time
 
-The data is currently stored in the database and displayed through the `/lib/components/artistTable.svelte` component. The table’s values are populated by a SQL query found in `/routes/task-1/+page.server/svelte`, but the logic behind this query and the component’s rendering are both faulty.
+The data is currently stored in the database (`./database/main.db`) and displayed through the `/lib/components/artistTable.svelte` component. The table’s values are populated by a SQL query found in `/routes/task-1/+page.server/svelte`, but the logic behind this query and the component’s rendering are both faulty.
 
 Your task is to identify and resolve the issues in both the database query and the Svelte component so that the correct data is displayed. You should consider the following:
 
@@ -42,15 +42,13 @@ Once you’ve resolved the issues, the table should correctly display:
 - The **Total Interaction Time** formatted in seconds, minutes, or hours.
 - The **Total Unique Visitors** for each artist.
 
----
-
-### **Task 2: Analysing Engagement Trends on Artist Pages**
+# **Task 2: Analysing Engagement Trends on Artist Pages**
 
 ### **Description:**
 
 You are tasked with analysing user engagement on artist pages to understand when artists experience the most positive engagement with their tracks. The goal is to identify the time of day when each artist receives the highest amount of positive user interactions.
 
-You have access to a dataset of user events, which tracks various interactions users have with artists' tracks. Each interaction is recorded with a timestamp, and it is important to categorise interactions as "positive" and calculate the total engagement based on the type of interaction.
+You have access to the table `user_events`, which tracks various interactions users have with artists' tracks. Each interaction is recorded with a timestamp, and it is important to categorise interactions as "positive" and calculate the total engagement based on the type of interaction.
 
 ### **Requirements**:
 
@@ -82,11 +80,12 @@ You have access to a dataset of user events, which tracks various interactions u
 **Notes:**
 
 - You may choose the type of graph you think best represents the data.
-- You may use a javascript compatible graphing library of your choice (ie. D3, Charts.js, etc.)
+- You may use a JavaScript compatible graphing library of your choice (ie. D3, Charts.js, etc.)
 
 ---
+
+# Miscellaneous
 
 Other notes, organise them somewhere:
 
 - If you ever need to reset your database, you may run the `./database/seed.ts`.
-- We use bun
