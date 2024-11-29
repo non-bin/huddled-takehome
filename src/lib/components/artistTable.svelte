@@ -35,7 +35,7 @@
         <tr>
           <th scope="col" class="px-6 py-3">Artist Id</th>
           <th scope="col" class="px-6 py-3">Artist Name</th>
-          <th scope="col" class="px-6 py-3">Total Time Spent (minutes)</th>
+          <th scope="col" class="px-6 py-3">Total Time Spent</th>
           <th scope="col" class="px-6 py-3">Total Unique Visitors</th>
         </tr>
       </thead>
