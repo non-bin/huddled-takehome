@@ -1,5 +1,20 @@
-# Resources:
-https://bun.sh/
+---
+
+# Introduction
+
+Hi, welcome to our take-home exam. The questions are roughly expected to take between 3 - 4 hours of your time, and you have until 9AM on Monday, 2nd December, to submit it.
+
+### Submission Form:
+
+Once you are done with your tasks, please submit a link to your GitHub repository to this link: [Take-home Test Submission Form](https://www.notion.so/14cab4c2609480d4ae31fb2bd99b85e4?pvs=21) 
+
+### Resources & Notes:
+
+1. If you ever need to reset your database, you may run the `./database/seed.ts`. 
+2. Seed.ts is currently configured to run using [Bun.sh](https://bun.sh/), but you are allowed to change it as per your preference
+3. You **do not** need to do any implementation for question 3, it is only there to test creativity and lateral thinking
+
+---
 
 # **Task 1: Debugging Artist Interaction Table**
 
@@ -10,7 +25,7 @@ You have been provided with a system that tracks user interactions on artist pag
 The table should show the following columns:
 
 | Artist Id | Artist Name | Total Interaction Time | Total Unique Visitors |
-|-----------|-------------|-------------------------|------------------------|
+| --- | --- | --- | --- |
 
 **Important Requirements**:
 
@@ -42,13 +57,15 @@ Once you’ve resolved the issues, the table should correctly display:
 - The **Total Interaction Time** formatted in seconds, minutes, or hours.
 - The **Total Unique Visitors** for each artist.
 
+---
+
 # **Task 2: Analysing Engagement Trends on Artist Pages**
 
 ### **Description:**
 
 You are tasked with analysing user engagement on artist pages to understand when artists experience the most positive engagement with their tracks. The goal is to identify the time of day when each artist receives the highest amount of positive user interactions.
 
-You have access to the table `user_events`, which tracks various interactions users have with artists' tracks. Each interaction is recorded with a timestamp, and it is important to categorise interactions as "positive" and calculate the total engagement based on the type of interaction.
+You have access to the table `user_events`, which tracks various interactions users have with artists' tracks. Each interaction is recorded with a timestamp.
 
 ### **Requirements**:
 
@@ -61,8 +78,8 @@ You have access to the table `user_events`, which tracks various interactions us
     - You will need to consider the total positive engagement score for each artist based on these weights.
 2. **Time of Day**:
     - You need to determine the time of day (hour of the day) when each artist experiences the most positive engagement. Group the data by hour (0–23) and calculate the total positive engagement for each artist during each hour of the day.
-3. **Timezone Considerations**:
-    - The timestamps in the dataset are in UTC, but you need to convert them to the user’s local timezone. You have access to the user’s timezone in the `users` table, so make sure you adjust the timestamps accordingly.
+3. **Time-zone Considerations**:
+    - The timestamps in the dataset are in UTC, but you need to convert them to the user’s local time-zone. You have access to the user’s timezone in the `users` table, so make sure you adjust the timestamps accordingly.
 4. **Visualisation**:
     - Once you have cleaned and aggregated the data, visualise the results:
         - Create a graph that shows the total positive engagement for each artist, grouped by hour of the day (0–23).
@@ -80,12 +97,27 @@ You have access to the table `user_events`, which tracks various interactions us
 **Notes:**
 
 - You may choose the type of graph you think best represents the data.
-- You may use a JavaScript compatible graphing library of your choice (ie. D3, Charts.js, etc.)
+- You may use a JavaScript-compatible graphing library of your choice (i.e., D3, Charts.js, etc.)
 
----
+## **Task 3: Creative ways to enhance user experience**
 
-# Miscellaneous
+### **Description:**
 
-Other notes, organise them somewhere:
+Based on the trends and data available, write down some dot points on how you would improve the way users discover new artists. 
 
-- If you ever need to reset your database, you may run the `./database/seed.ts`.
+### **Requirements (to think about):**
+
+- **Data Analysis**:
+    - Think about how you would analyse the existing interaction data to identify patterns and preferences for each user.
+    - Consider factors such as the frequency of visits, interaction types (e.g., likes, shares), and the duration of interactions.
+
+### **Implementation Plan**
+
+- Provide a high-level plan for how you would implement the recommendation system in the existing codebase.
+- Discuss any potential challenges and how you would address them.
+- **Note:** You are **not required to write any code** for this task. Instead, focus on explaining your thought process and approach. Just be prepared to discuss your ideas and approach in person during the interview.
+
+### **Expected Outcome:**
+
+- **Implementation Plan**: A high-level plan for integrating the recommendation system into the artist pages.
+- **Evaluation Plan**: A detailed plan for evaluating the effectiveness of the recommendation system, including proposed metrics and methods for collecting user feedback.
