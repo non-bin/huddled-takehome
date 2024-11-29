@@ -1,12 +1,29 @@
 <script lang="ts">
   let { artistVisits } = $props();
 
+  /**
+   * @param duration Elapsed time in milliseconds
+   */
   function formatDuration(duration: number): string {
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
+    const DECIMAL_PLACES = 2;
 
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    const durationInSeconds = duration / 1000;
+    const hours = durationInSeconds / 60 / 60;
+    const minutes = (durationInSeconds % (60*60)) / 60;
+    const seconds = durationInSeconds % 60;
+
+    // TODO: Consider always formatting with hours, since every duration is in the thousands of hours
+    let output = '';
+    if (hours > 0) {
+      output += `${hours.toFixed(DECIMAL_PLACES)} Hours`;
+    } else if (minutes > 0) {
+      output += `${minutes.toFixed(DECIMAL_PLACES)} Minutes`;
+    } else {
+      output += `${seconds.toFixed(DECIMAL_PLACES)} Seconds`;
+    }
+    return output;
   }
+
 </script>
 
 <div class="overflow-x-auto">
