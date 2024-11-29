@@ -16,6 +16,8 @@ JOIN
     visits v ON a.id = v.artist_id
 GROUP BY
     a.id
+ORDER BY
+    total_visit_duration DESC
 `;
 
   const data = await db.prepare(query).all();
