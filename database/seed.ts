@@ -9,6 +9,7 @@ import { Database, Statement } from "bun:sqlite"; // You can use this if you pre
 
 interface User {
   username: string;
+  timezone: string;
 }
 
 interface UserSession {
@@ -87,11 +88,6 @@ function getRandomUserInteraction(tracks: { id: number }[]): {
     { eventType: "unfollow_artist", weight: 2 },
     { eventType: "share_artist", weight: 3 },
     {
-      eventType: "add_to_playlist",
-      weight: 10,
-      targets: ["Playlist A", "Playlist B"],
-    },
-    {
       eventType: "hover_section",
       weight: 5,
       targets: ["Popular Tracks", "Albums", "Related Artists"],
@@ -129,12 +125,22 @@ function getRandomUserInteraction(tracks: { id: number }[]): {
 // -----------------------------------------------------------------------------
 
 function seedUsers(amount: number): void {
+  const availableTimezones = [
+    "America/New_York",
+    "America/Los_Angeles",
+    "Europe/London",
+    "Asia/Tokyo",
+    "Australia/Sydney",
+    "Africa/Johannesburg",
+  ];
+
   // Drop and recreate the users table
   db.exec(`
     DROP TABLE IF EXISTS users;
     CREATE TABLE "users" (
       "id" INTEGER,
       "username" TEXT NOT NULL UNIQUE,
+      "timezone" TEXT NOT NULL,
       PRIMARY KEY ("id" AUTOINCREMENT)
     );
   `);
@@ -142,11 +148,13 @@ function seedUsers(amount: number): void {
   // Seed the users table
   const users: User[] = Array.from({ length: amount }, (_, i) => ({
     username: `User ${i + 1}`,
+    timezone:
+      availableTimezones[Math.floor(Math.random() * availableTimezones.length)],
   }));
   const query: Statement = db.prepare(
-    "INSERT INTO users (username) VALUES ($username)"
+    "INSERT INTO users (username, timezone) VALUES ($username, $timezone)"
   );
-  users.forEach((user: User) => query.run(user.username));
+  users.forEach((user: User) => query.run(user.username, user.timezone));
 
   console.log("Users table seeded successfully.");
 }
@@ -170,11 +178,14 @@ function seedUserSessions(amount: number): void {
   const userIds: { id: number }[] = userIdsQuery.all();
 
   // Seed the user sessions table
-  const userSessions: UserSession[] = Array.from({ length: amount }, (_, i) => ({
-    user_id: userIds[i % userIds.length].id,
-    created_at: getTimestamp(),
-    active: Math.random() > 0.5 ? 1 : 0, // SQLite expects integers for booleans (0 or 1)
-  }));
+  const userSessions: UserSession[] = Array.from(
+    { length: amount },
+    (_, i) => ({
+      user_id: userIds[i % userIds.length].id,
+      created_at: getTimestamp(),
+      active: Math.random() > 0.5 ? 1 : 0, // SQLite expects integers for booleans (0 or 1)
+    })
+  );
 
   // Prepare the insert statement
   const query: Statement = db.prepare(
