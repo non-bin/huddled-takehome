@@ -99,7 +99,7 @@ You have access to the table `user_events`, which tracks various interactions us
 - You may choose the type of graph you think best represents the data.
 - You may use a JavaScript-compatible graphing library of your choice (i.e., D3, Charts.js, etc.)
 
-## **Task 3: Creative ways to enhance user experience**
+# **Task 3: Creative ways to enhance user experience**
 
 ### **Description:**
 
