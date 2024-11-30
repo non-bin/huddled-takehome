@@ -91,8 +91,6 @@ JOIN
     ] += eventScore;
   }
 
-  console.log(data);
-
   return {
     data
   };

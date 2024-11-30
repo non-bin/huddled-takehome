@@ -1,7 +1,5 @@
 <script lang="ts">
   let { artistTrends } = $props();
-  console.log(artistTrends);
-
 </script>
 
 <div class="overflow-x-auto">
