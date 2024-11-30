@@ -5,7 +5,7 @@
    * @param duration Elapsed time in milliseconds
    */
   function formatDuration(duration: number): string {
-    const DECIMAL_PLACES = 2;
+    const DECIMAL_PLACES = 1;
 
     const durationInSeconds = duration / 1000;
     const hours = durationInSeconds / 60 / 60;
@@ -13,15 +13,15 @@
     const seconds = durationInSeconds % 60;
 
     // TODO: Consider always formatting with hours, since every duration is in the thousands of hours
-    let output = '';
-    if (hours > 0) {
-      output += `${hours.toFixed(DECIMAL_PLACES)} Hours`;
+    if (hours > 1000) {
+      return `${(hours / 1000).toFixed(DECIMAL_PLACES)} Thousand Hours`;
+    } else if (hours > 0) {
+      return `${hours.toFixed(DECIMAL_PLACES)} Hours`;
     } else if (minutes > 0) {
-      output += `${minutes.toFixed(DECIMAL_PLACES)} Minutes`;
+      return `${minutes.toFixed(DECIMAL_PLACES)} Minutes`;
     } else {
-      output += `${seconds.toFixed(DECIMAL_PLACES)} Seconds`;
+      return `${seconds.toFixed(DECIMAL_PLACES)} Seconds`;
     }
-    return output;
   }
 
 </script>
