@@ -5,14 +5,14 @@
 
   let { data }: { data: PageData } = $props();
 
-  let artistID = $state(1);
+  let artistIDs = $state([1, 2]);
 </script>
 
-<button onclick={() => artistID++}>
-  Artist ID: {artistID}
-</button>
+<div>
+  Artist IDs: {artistIDs.join(', ')}
+</div>
 <div class="flex flex-col items-center justify-center">
-  <Chart data={data.data} {artistID} />
+  <Chart data={data.data} {artistIDs} />
 </div>
 <div class="flex flex-col">
   <EngagementTable artistTrends={data.data} />

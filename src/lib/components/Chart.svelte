@@ -1,10 +1,10 @@
 <script lang="ts">
   let {
     data,
-    artistID
+    artistIDs
   }: {
     data: { artistName: string; scoresByHour: number[] }[];
-    artistID: number;
+    artistIDs: number[];
   } = $props();
 
   /**
@@ -49,25 +49,45 @@
       })
     );
 
-    let series = chart.series.push(
-      // am5radar.SmoothedRadarLineSeries.new(root, { // Use this for a smoothed line
-      am5radar.RadarLineSeries.new(root, {
-        name: 'Series',
-        xAxis: hourAxis,
-        yAxis: engagementAxis,
-        valueYField: 'value',
-        categoryXField: 'time'
-      })
-    );
-
     $effect(() => {
-      const formattedData = data[artistID].scoresByHour.map((score, hour) => {
-        return {
-          time: hourToLabel(hour),
-          value: score
-        };
-      });
-      series.data.setAll(formattedData);
+      let allSeries = [];
+      for (let index = 0; index < artistIDs.length; index++) {
+        const artistID = artistIDs[index];
+        if (
+          typeof data[artistID] === 'undefined' ||
+          !Object.hasOwn(data[artistID], 'artistName') ||
+          !Object.hasOwn(data[artistID], 'scoresByHour') ||
+          data[artistID].scoresByHour.length !== 24
+        ) {
+          continue;
+        }
+
+        // Create a series for each artist
+        const series = chart.series.push(
+          // am5radar.SmoothedRadarLineSeries.new(root, { // Use this for a smoothed line
+          am5radar.RadarLineSeries.new(root, {
+            name: data[artistID].artistName,
+            xAxis: hourAxis,
+            yAxis: engagementAxis,
+            valueYField: 'value',
+            categoryXField: 'time'
+          })
+        );
+        series.data.setAll(
+          data[artistID].scoresByHour.map((score, hour) => {
+            return {
+              time: hourToLabel(hour),
+              value: score
+            };
+          })
+        );
+
+        allSeries.push(series);
+      }
+
+      // Update the legend with the series
+      let legend = chart.children.push(am5.Legend.new(root, {}));
+      legend.data.setAll(chart.series.values);
     });
 
     return () => {
