@@ -2,6 +2,27 @@
   let { artistTrends } = $props();
 
   let allSelected = $state(false);
+
+  function generateStyle(engagement: number): string {
+    const POSITIVE_THRESHOLD = 10;
+    const NEGATIVE_THRESHOLD = 2;
+
+    let style = 'background: ';
+    let opacity = 0;
+
+    if (engagement > 0) {
+      opacity = engagement / POSITIVE_THRESHOLD;
+      style += `rgba(0, 255, 0, ${opacity});`;
+    } else {
+      opacity = (-1 * engagement) / NEGATIVE_THRESHOLD;
+      style += `rgba(255, 0, 0, ${opacity});`;
+    }
+
+    if (opacity > 0.35) {
+      style += 'color:black;';
+    }
+    return style;
+  }
 </script>
 
 <div class="overflow-x-auto">
@@ -76,30 +97,126 @@
               >
                 {artist.artistName}
               </td>
-              <td class="px-6 py-4">{artist.scoresByHour[0]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[1]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[2]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[3]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[4]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[5]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[6]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[7]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[8]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[9]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[10]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[11]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[12]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[13]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[14]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[15]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[16]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[17]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[18]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[19]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[20]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[21]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[22]}</td>
-              <td class="px-6 py-4">{artist.scoresByHour[23]}</td>
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[0])}
+                >{artist.scoresByHour[0]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[1])}
+                >{artist.scoresByHour[1]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[2])}
+                >{artist.scoresByHour[2]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[3])}
+                >{artist.scoresByHour[3]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[4])}
+                >{artist.scoresByHour[4]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[5])}
+                >{artist.scoresByHour[5]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[6])}
+                >{artist.scoresByHour[6]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[7])}
+                >{artist.scoresByHour[7]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[8])}
+                >{artist.scoresByHour[8]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[9])}
+                >{artist.scoresByHour[9]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[10])}
+                >{artist.scoresByHour[10]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[11])}
+                >{artist.scoresByHour[11]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[12])}
+                >{artist.scoresByHour[12]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[13])}
+                >{artist.scoresByHour[13]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[14])}
+                >{artist.scoresByHour[14]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[15])}
+                >{artist.scoresByHour[15]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[16])}
+                >{artist.scoresByHour[16]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[17])}
+                >{artist.scoresByHour[17]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[18])}
+                >{artist.scoresByHour[18]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[19])}
+                >{artist.scoresByHour[19]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[20])}
+                >{artist.scoresByHour[20]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[21])}
+                >{artist.scoresByHour[21]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[22])}
+                >{artist.scoresByHour[22]}</td
+              >
+              <td
+                class="px-6 py-4"
+                style={generateStyle(artist.scoresByHour[23])}
+                >{artist.scoresByHour[23]}</td
+              >
             </tr>
           {/if}
         {/each}
