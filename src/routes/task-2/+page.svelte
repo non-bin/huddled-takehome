@@ -4,10 +4,15 @@
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
+
+  let artistID = $state(1);
 </script>
 
+<button onclick={() => artistID++}>
+  Artist ID: {artistID}
+</button>
 <div class="flex flex-col items-center justify-center">
-  <Chart data={data.data} />
+  <Chart data={data.data} {artistID} />
 </div>
 <div class="flex flex-col">
   <EngagementTable artistTrends={data.data} />

@@ -1,6 +1,11 @@
 <script lang="ts">
-  let { data }: { data: { artistName: string; scoresByHour: number[] }[] } =
-    $props();
+  let {
+    data,
+    artistID
+  }: {
+    data: { artistName: string; scoresByHour: number[] }[];
+    artistID: number;
+  } = $props();
 
   /**
    * Convert a numeric hour to human readable format e.g. 1am, 2pm
@@ -55,13 +60,15 @@
       })
     );
 
-    const formattedData = data[2].scoresByHour.map((score, hour) => {
-      return {
-        time: hourToLabel(hour),
-        value: score
-      };
+    $effect(() => {
+      const formattedData = data[artistID].scoresByHour.map((score, hour) => {
+        return {
+          time: hourToLabel(hour),
+          value: score
+        };
+      });
+      series.data.setAll(formattedData);
     });
-    series.data.setAll(formattedData);
 
     return () => {
       root.dispose();
