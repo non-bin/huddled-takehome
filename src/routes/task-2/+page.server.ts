@@ -26,20 +26,18 @@ function getHour(timestamp: number, timezone: string) {
 export const load: PageServerLoad = async ({ locals }) => {
   const db = locals.db;
 
-  /* Notes
-   */
   const ENGAGEMENT_VALUES: { [event: string]: number } = {
-    play_track: 1, // Using this as my baseline
-    pause_track: -0.5, // They didn't like it, or they were interrupted
-    like_track: 2,
-    share_track: 3, // Probably in addition to playing the track
-    add_track_to_playlist: 1,
+    play_track: 0.2, // People play tracks all the time so it's not that valuable
+    pause_track: -0.1, // They didn't like it, or they were interrupted
+    like_track: 1, // I think this is a good baseline since you can only like a song once
+    add_track_to_playlist: 1, // Similar to liking
+    share_track: 2, // Valuable, but not putting this so high as it's also likely to bring more engagement
+    share_artist: 4, // Even better that sharing a track, but as above it's likely to bring more engagement
+    follow_artist: 5, // Very good, and can't be repeated
     unfollow_artist: -5, // Very bad
-    follow_artist: 5, // Very good
-    share_artist: 4, // Probably in addition to following the artist
-    hover_artist_name: 0,
     hover_section: 0,
-    scroll_page: 0
+    scroll_page: 0,
+    hover_artist_name: 0
   };
   const ENGAGEMENT_TYPES = Object.keys(ENGAGEMENT_VALUES);
 
@@ -94,6 +92,21 @@ JOIN
     data[event.artist_id].scoresByHour[
       getHour(event.timestamp, event.timezone)
     ] += eventScore;
+  }
+
+  // Clean up rounding errors
+  for (let artistID = 0; artistID < data.length; artistID++) {
+    const artist = data[artistID];
+    if (
+      typeof artist === 'undefined' ||
+      !Object.hasOwn(artist, 'scoresByHour')
+    ) {
+      continue;
+    }
+
+    for (let hour = 0; hour < artist.scoresByHour.length; hour++) {
+      artist.scoresByHour[hour] = +artist.scoresByHour[hour].toFixed(1);
+    }
   }
 
   return {
