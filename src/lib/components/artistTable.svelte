@@ -1,12 +1,29 @@
 <script lang="ts">
   let { artistVisits } = $props();
 
+  /**
+   * @param duration Elapsed time in milliseconds
+   */
   function formatDuration(duration: number): string {
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
+    const DECIMAL_PLACES = 1;
 
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    const durationInSeconds = duration / 1000;
+    const hours = durationInSeconds / 60 / 60;
+    const minutes = (durationInSeconds % (60*60)) / 60;
+    const seconds = durationInSeconds % 60;
+
+    // TODO: Consider always formatting with hours, since every duration is in the thousands of hours
+    if (hours > 1000) {
+      return `${(hours / 1000).toFixed(DECIMAL_PLACES)} Thousand Hours`;
+    } else if (hours > 0) {
+      return `${hours.toFixed(DECIMAL_PLACES)} Hours`;
+    } else if (minutes > 0) {
+      return `${minutes.toFixed(DECIMAL_PLACES)} Minutes`;
+    } else {
+      return `${seconds.toFixed(DECIMAL_PLACES)} Seconds`;
+    }
   }
+
 </script>
 
 <div class="overflow-x-auto">
@@ -18,7 +35,8 @@
         <tr>
           <th scope="col" class="px-6 py-3">Artist Id</th>
           <th scope="col" class="px-6 py-3">Artist Name</th>
-          <th scope="col" class="px-6 py-3">Total Time Spent (minutes)</th>
+          <th scope="col" class="px-6 py-3">Total Time Spent</th>
+          <th scope="col" class="px-6 py-3">Total Unique Visitors</th>
         </tr>
       </thead>
       <tbody>
@@ -38,7 +56,7 @@
               {formatDuration(total_visit_duration)}
             </td>
             <td class="px-6 py-4">
-              {formatDuration(unique_session_count)}
+              {unique_session_count}
             </td>
           </tr>
         {/each}
