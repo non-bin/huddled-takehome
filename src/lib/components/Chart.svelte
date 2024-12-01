@@ -14,6 +14,12 @@
     return hour < 12 ? `${hour}am` : hour === 12 ? '12pm' : `${hour - 12}pm`;
   }
 
+  /*
+  I chose amCharts because I've used them before and I understand their interface,
+  and I chose a radar chart because time is a continuous axis, which wouldn't be
+  conveyed well by a line or bar chart, whereas a radar chart is perfect.
+  */
+
   import { onMount } from 'svelte';
   import * as am5 from '@amcharts/amcharts5?client';
   import * as am5xy from '@amcharts/amcharts5/xy?client';
