@@ -4,16 +4,23 @@
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
+  let engagementData = $state(data.data);
 
-  let artistIDs = $state([1, 2]);
+  let sumChart = $state(false);
 </script>
 
-<div>
-  Artist IDs: {artistIDs.join(', ')}
-</div>
 <div class="flex flex-col items-center justify-center">
-  <Chart data={data.data} {artistIDs} />
+  <Chart data={engagementData} {sumChart} />
 </div>
+
+<input
+  type="checkbox"
+  name="sumChart"
+  id="sumChart"
+  onchange={() => (sumChart = !sumChart)}
+/>
+<label for="sumChart">Sum Engagements</label>
+
 <div class="flex flex-col">
-  <EngagementTable artistTrends={data.data} />
+  <EngagementTable artistTrends={engagementData} />
 </div>

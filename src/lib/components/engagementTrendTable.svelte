@@ -3,12 +3,17 @@
 </script>
 
 <div class="overflow-x-auto">
-  <div class="min-w-max w-[60rem] h-[60rem] overflow-y-auto relative scrollbar-pretty">
+  <div
+    class="min-w-max w-[60rem] h-[60rem] overflow-y-auto relative scrollbar-pretty"
+  >
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
         class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0"
       >
         <tr>
+          <th scope="col" class="px-6 py-3"
+            ><input type="checkbox" name="selectAll" id="selectAll" /></th
+          >
           <th scope="col" class="px-6 py-3">Artist Name</th>
           <th scope="col" class="px-6 py-3">12am</th>
           <th scope="col" class="px-6 py-3">1am</th>
@@ -37,39 +42,46 @@
         </tr>
       </thead>
       <tbody>
-        {#each artistTrends as artistTrend}
+        {#each artistTrends as artist}
           <!-- Skip empty or invalid rows -->
-          {#if typeof artistTrend !== 'undefined' && Object.hasOwn(artistTrend, 'artistName') && Object.hasOwn(artistTrend, 'scoresByHour') && artistTrend.scoresByHour.length === 24}
+          {#if typeof artist !== 'undefined' && Object.hasOwn(artist, 'artistName') && Object.hasOwn(artist, 'scoresByHour') && artist.scoresByHour.length === 24}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <td class="px-6 py-4"
+                ><input
+                  type="checkbox"
+                  checked={artist.selected}
+                  onchange={() => (artist.selected = !artist.selected)}
+                /></td
+              >
               <td
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {artistTrend.artistName}
+                {artist.artistName}
               </td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[0]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[1]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[2]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[3]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[4]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[5]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[6]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[7]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[8]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[9]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[10]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[11]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[12]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[13]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[14]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[15]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[16]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[17]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[18]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[19]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[20]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[21]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[22]}</td>
-              <td class="px-6 py-4">{artistTrend.scoresByHour[23]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[0]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[1]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[2]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[3]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[4]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[5]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[6]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[7]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[8]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[9]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[10]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[11]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[12]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[13]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[14]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[15]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[16]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[17]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[18]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[19]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[20]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[21]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[22]}</td>
+              <td class="px-6 py-4">{artist.scoresByHour[23]}</td>
             </tr>
           {/if}
         {/each}
@@ -79,24 +91,23 @@
 </div>
 
 <style>
-/* Custom scrollbar styles */
-.scrollbar-pretty::-webkit-scrollbar {
-  width: 10px;
-}
+  /* Custom scrollbar styles */
+  .scrollbar-pretty::-webkit-scrollbar {
+    width: 10px;
+  }
 
-.scrollbar-pretty::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
+  .scrollbar-pretty::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
 
-.scrollbar-pretty::-webkit-scrollbar-thumb {
-  background: rgba(149, 158, 160, 0.5);
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
+  .scrollbar-pretty::-webkit-scrollbar-thumb {
+    background: rgba(149, 158, 160, 0.5);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
 
-.scrollbar-pretty::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 100, 100, 0.7);
-}
-
+  .scrollbar-pretty::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 100, 100, 0.7);
+  }
 </style>

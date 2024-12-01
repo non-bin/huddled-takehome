@@ -1,10 +1,10 @@
 <script lang="ts">
   let {
     data,
-    artistIDs
+    sumChart
   }: {
-    data: { artistName: string; scoresByHour: number[] }[];
-    artistIDs: number[];
+    data: { artistName: string; scoresByHour: number[]; selected: boolean }[];
+    sumChart: boolean;
   } = $props();
 
   /**
@@ -49,44 +49,74 @@
       })
     );
 
-    $effect(() => {
-      let allSeries = [];
-      for (let index = 0; index < artistIDs.length; index++) {
-        const artistID = artistIDs[index];
-        if (
-          typeof data[artistID] === 'undefined' ||
-          !Object.hasOwn(data[artistID], 'artistName') ||
-          !Object.hasOwn(data[artistID], 'scoresByHour') ||
-          data[artistID].scoresByHour.length !== 24
-        ) {
-          continue;
-        }
+    let allSeries = [];
+    let legend = chart.children.push(am5.Legend.new(root, {}));
 
-        // Create a series for each artist
-        const series = chart.series.push(
-          // am5radar.SmoothedRadarLineSeries.new(root, { // Use this for a smoothed line
+    $effect(() => {
+      while (chart.series.length) {
+        chart.series.removeIndex(0).dispose();
+      }
+
+      if (sumChart) {
+        // Create a series for the sum of all artists
+        let sumSeries = chart.series.push(
           am5radar.RadarLineSeries.new(root, {
-            name: data[artistID].artistName,
+            name: 'Sum',
             xAxis: hourAxis,
             yAxis: engagementAxis,
             valueYField: 'value',
             categoryXField: 'time'
           })
         );
-        series.data.setAll(
-          data[artistID].scoresByHour.map((score, hour) => {
+        sumSeries.data.setAll(
+          Array.from({ length: 24 }, (_, hour) => {
             return {
               time: hourToLabel(hour),
-              value: score
+              value: data.reduce(
+                (sum, artist) =>
+                  sum + (artist.selected ? artist.scoresByHour[hour] : 0), // Only sum selected artists
+                0
+              )
             };
           })
         );
+      } else {
+        for (let artistID = 0; artistID < data.length; artistID++) {
+          if (
+            typeof data[artistID] === 'undefined' ||
+            !Object.hasOwn(data[artistID], 'artistName') ||
+            !Object.hasOwn(data[artistID], 'scoresByHour') ||
+            data[artistID].scoresByHour.length !== 24 ||
+            data[artistID].selected == false
+          ) {
+            continue;
+          }
 
-        allSeries.push(series);
+          // Create a series for each artist
+          const series = chart.series.push(
+            // am5radar.SmoothedRadarLineSeries.new(root, { // Use this for a smoothed line
+            am5radar.RadarLineSeries.new(root, {
+              name: data[artistID].artistName,
+              xAxis: hourAxis,
+              yAxis: engagementAxis,
+              valueYField: 'value',
+              categoryXField: 'time'
+            })
+          );
+          series.data.setAll(
+            data[artistID].scoresByHour.map((score, hour) => {
+              return {
+                time: hourToLabel(hour),
+                value: score
+              };
+            })
+          );
+
+          allSeries.push(series);
+        }
       }
 
       // Update the legend with the series
-      let legend = chart.children.push(am5.Legend.new(root, {}));
       legend.data.setAll(chart.series.values);
     });
 

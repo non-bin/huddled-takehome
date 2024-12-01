@@ -69,12 +69,17 @@ JOIN
     .all();
 
   // Setup data structure for artists and their scores
-  const data: { artistName: string; scoresByHour: number[] }[] = [];
+  const data: {
+    artistName: string;
+    scoresByHour: number[];
+    selected: boolean;
+  }[] = [];
   for (let artistIndex = 0; artistIndex < artistsData.length; artistIndex++) {
     const artist = artistsData[artistIndex];
     data[artist.id] = {
       artistName: artist.name,
-      scoresByHour: new Array(24).fill(0)
+      scoresByHour: new Array(24).fill(0),
+      selected: false
     };
   }
 
