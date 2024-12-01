@@ -109,6 +109,15 @@ JOIN
     }
   }
 
+  // Preselect the first valid artist
+  for (let artistID = 0; artistID < data.length; artistID++) {
+    const artist = data[artistID];
+    if (typeof artist !== 'undefined') {
+      artist.selected = true;
+      break;
+    }
+  }
+
   return {
     data
   };
