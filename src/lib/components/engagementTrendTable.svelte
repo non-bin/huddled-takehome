@@ -1,5 +1,7 @@
 <script lang="ts">
   let { artistTrends } = $props();
+
+  let allSelected = $state(false);
 </script>
 
 <div class="overflow-x-auto">
@@ -12,7 +14,23 @@
       >
         <tr>
           <th scope="col" class="px-6 py-3"
-            ><input type="checkbox" name="selectAll" id="selectAll" /></th
+            ><input
+              type="checkbox"
+              checked={allSelected}
+              onchange={() => {
+                allSelected = !allSelected;
+                for (
+                  let artistID = 0;
+                  artistID < artistTrends.length;
+                  artistID++
+                ) {
+                  const artist = artistTrends[artistID];
+                  if (typeof artist !== 'undefined') {
+                    artist.selected = allSelected;
+                  }
+                }
+              }}
+            /></th
           >
           <th scope="col" class="px-6 py-3">Artist Name</th>
           <th scope="col" class="px-6 py-3">12am</th>
@@ -50,7 +68,7 @@
                 ><input
                   type="checkbox"
                   checked={artist.selected}
-                  onchange={() => (artist.selected = !artist.selected)}
+                  onchange={(element) => (artist.selected = !artist.selected)}
                 /></td
               >
               <td
